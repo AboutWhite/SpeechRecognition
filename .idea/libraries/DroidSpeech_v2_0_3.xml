@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="DroidSpeech-v2.0.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/01e7fdb061d0e8b7a903e1e25e841f44de8260cd/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/01e7fdb061d0e8b7a903e1e25e841f44de8260cd/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.vikramezhil/DroidSpeech/v2.0.3/b9941f7d60eaacb6150d157dea5cf97a0d35683f/DroidSpeech-v2.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
