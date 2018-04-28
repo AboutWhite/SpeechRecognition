@@ -25,7 +25,10 @@ import com.vikramezhil.droidspeech.OnDSPermissionsListener;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends Activity implements OnDSListener, OnClickListener {
+import dataTransfer.TCPClient;
+import dataTransfer.TCPServer;
+
+public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived, TCPServer.OnMessageReceived {
 
     public final String TAG = "Activity_DroidSpeech";
     private DroidSpeech droidSpeech;
@@ -33,7 +36,8 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     private String result = "Result: ";
     private ImageView start;
     private ImageView stop;
-
+    private TCPClient client;
+    private TCPServer server;
 
 
 
@@ -42,6 +46,12 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //init TCP Client/Server
+        client = new TCPClient(this);
+        server = new TCPServer(this);
+
+        server.execute(0);
+        client.execute(0);
 
 
         // Initialize Droid Speech
@@ -173,6 +183,11 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
                 break;
         }
 
+    }
+
+    public void messageReceived(String message)
+    {
+        Log.d("communication", "messageReceived: " + message);
     }
 }
 
