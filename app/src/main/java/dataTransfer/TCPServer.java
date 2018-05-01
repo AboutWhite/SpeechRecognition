@@ -10,6 +10,7 @@ import android.util.Log;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * The class extends the Thread class so we can receive and send messages at the same time
@@ -94,7 +95,7 @@ public class TCPServer extends AsyncTask<Integer, Integer, Double>
                 System.out.println("S: Done.");
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("S: Error");
             e.printStackTrace();
         }

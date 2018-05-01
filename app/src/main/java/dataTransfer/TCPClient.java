@@ -14,7 +14,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
 
     private String serverMessage;
-    public static final String SERVERIP = "127.0.0.1"; //"192.168.0.102"; //your computer IP address
+    public static final String SERVERIP = "192.168.178.46"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
     public static final int SERVERPORT = 4444;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false;
@@ -57,6 +57,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
             //create a socket to make the connection with the server
             Socket socket = new Socket(serverAddr, SERVERPORT);
+            Log.d("Clinet", "socket initiated");
 
             try {
 
@@ -73,14 +74,14 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
                     //Log.d("Client", "running");
-                    serverMessage = in.readLine();
+                    //serverMessage = in.readLine();
 
                     if (serverMessage != null && mMessageListener != null) {
                         //call the method messageReceived from MyActivity class
                         mMessageListener.messageReceived(serverMessage);
                     }
                     serverMessage = null;
-                    sendMessage("test");
+                    sendMessage("This is a client message to the server");
 
                 }
 
@@ -89,6 +90,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
             } catch (Exception e) {
 
                 Log.e("TCP", "S: Error", e);
+                e.printStackTrace();
 
             } finally {
                 //the socket must be closed. It is not possible to reconnect to this socket

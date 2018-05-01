@@ -1,5 +1,6 @@
 package com.example.aboutwhite.speechrecognizer;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -46,12 +47,13 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("TESTTEST");
         //init TCP Client/Server
-        client = new TCPClient(this);
         server = new TCPServer(this);
+        client = new TCPClient(this);
 
-        server.execute(0);
-        client.execute(0);
+
+        server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 
         // Initialize Droid Speech
@@ -70,7 +72,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
         start.setOnClickListener(this);
         //stop.setOnClickListener(this);
-
+        client.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
