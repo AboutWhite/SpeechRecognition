@@ -29,7 +29,7 @@ import java.util.Random;
 import dataTransfer.TCPClient;
 import dataTransfer.TCPServer;
 
-public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived, TCPServer.OnMessageReceived {
+public class MainActivity extends Activity implements OnDSListener, OnClickListener, OnDSPermissionsListener, TCPClient.OnMessageReceived, TCPServer.OnMessageReceived {
 
     public final String TAG = "Activity_DroidSpeech";
     private DroidSpeech droidSpeech;
@@ -54,10 +54,9 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
 
         server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+        droidSpeech = new DroidSpeech(this, getFragmentManager());
 
         // Initialize Droid Speech
-        droidSpeech = new DroidSpeech(this, null);
         droidSpeech.setOnDroidSpeechListener(this);
         droidSpeech.setShowRecognitionProgressView(true);
         droidSpeech.setOneStepResultVerify(false);
@@ -185,6 +184,41 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
                 break;
         }
 
+    }
+
+    @Override
+    public void onDroidSpeechAudioPermissionStatus(boolean audioPermissionGiven, String errorMsgIfAny)
+    {
+        if(audioPermissionGiven)
+        {
+            start.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    // Start listening
+                    start.performClick();
+                }
+            });
+        }
+        else
+        {
+            if(errorMsgIfAny != null)
+            {
+                // Permissions error
+                Toast.makeText(this, errorMsgIfAny, Toast.LENGTH_LONG).show();
+            }
+
+            stop.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    // Stop listening
+                    stop.performClick();
+                }
+            });
+        }
     }
 
     public void messageReceived(String message)
