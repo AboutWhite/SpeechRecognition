@@ -14,7 +14,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
 
     private String serverMessage;
-    public static final String SERVERIP = "192.168.2.101"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
+    public static final String SERVERIP = "192.168.178.46"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
     public static final int SERVERPORT = 4444;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false;
