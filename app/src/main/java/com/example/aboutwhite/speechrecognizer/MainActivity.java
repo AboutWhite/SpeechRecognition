@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     private ImageView stop;
     private TCPClient client;
     private TCPServer server;
+    private Button button;
 
 
 
