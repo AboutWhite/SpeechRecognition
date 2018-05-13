@@ -1,6 +1,9 @@
 package com.example.aboutwhite.speechrecognizer;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -55,6 +58,18 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
 
         server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
+            } else {
+                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+            }
+        } catch (Exception e){
+            if(audioManager == null) return;
+        }
 
 
         // Initialize Droid Speech
