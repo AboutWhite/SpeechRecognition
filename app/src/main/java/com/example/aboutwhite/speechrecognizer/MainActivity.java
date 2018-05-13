@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     private ImageView stop;
     private TCPClient client;
     private TCPServer server;
-    private Button button;
+
 
 
 
@@ -65,6 +65,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         droidSpeech.setRecognitionProgressMsgColor(Color.BLACK);
         droidSpeech.setOneStepVerifyConfirmTextColor(Color.BLACK);
         droidSpeech.setOneStepVerifyRetryTextColor(Color.BLACK);
+        droidSpeech.setOfflineSpeechRecognition(true);
 
         finalSpeechResult = findViewById(R.id.finalSpeechResult);
 
