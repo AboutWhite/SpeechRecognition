@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SpeechRecognizer</string>
+    <string name="no_data">no_data</string>
+    <string name="final_speech_result">final_speech_result</string>
+    <string name="sendString">Button</string>
+    <string name="ipEditText">EditText</string>
+</resources>
