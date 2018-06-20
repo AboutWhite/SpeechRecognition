@@ -58,4 +58,16 @@
         android:src="@drawable/btn_stop"
         android:contentDescription="@string/app_name"
         android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/ipEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ipEditText" />
+
+    <Button
+        android:id="@+id/restartClient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/restartClient"/>
 </LinearLayout>

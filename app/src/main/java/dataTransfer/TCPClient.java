@@ -14,10 +14,11 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
 
     private String serverMessage;
-    public static final String SERVERIP = "192.168.178.46"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
-    public static final int SERVERPORT = 4444;
+    private String serverIP = ""; // = "132.199.202.158"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
+    private int serverPort = 0;
     private OnMessageReceived mMessageListener = null;
-    private boolean mRun = false;
+    private boolean mRun = false; //is client listening?
+    private boolean isRunning = false; //is client running?
 
     PrintWriter out;
     BufferedReader in;
@@ -25,8 +26,10 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     /**
      *  Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(OnMessageReceived listener) {
+    public TCPClient(OnMessageReceived listener, String sIP, int port) {
         mMessageListener = listener;
+        serverIP = sIP;
+        serverPort = port;
     }
 
     /**
@@ -46,42 +49,38 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     }
 
     public void run() {
-
-        mRun = true;
-
         try {
-            //here you must put your computer's IP address.
-            InetAddress serverAddr = InetAddress.getByName(SERVERIP);
+            InetAddress serverAddr = InetAddress.getByName(serverIP);
 
             Log.e("TCP Client", "C: Connecting...");
 
             //create a socket to make the connection with the server
-            Socket socket = new Socket(serverAddr, SERVERPORT);
-            Log.d("Clinet", "socket initiated");
+            Socket socket = new Socket(serverAddr, serverPort);
+            Log.d("TCP Client", "socket initiated");
 
             try {
 
                 //send the message to the server
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
 
-                Log.e("TCP Client", "C: Sent.");
-
-                Log.e("TCP Client", "C: Done.");
+                Log.d("TCP Client", "printWriter initiated");
 
                 //receive the message which the server sends back
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+                mRun = true;
+                Log.d("TCP Client", "client ready to send");
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
-                    //Log.d("Client", "running");
+                    sendMessage("This is a client message to the server");
                     //serverMessage = in.readLine();
+                    Log.e("TCP Client", serverMessage);
 
                     if (serverMessage != null && mMessageListener != null) {
                         //call the method messageReceived from MyActivity class
                         mMessageListener.messageReceived(serverMessage);
                     }
                     serverMessage = null;
-                    sendMessage("This is a client message to the server");
 
                 }
 
@@ -106,6 +105,11 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
     }
 
+    public boolean isRunning()
+    {
+        return isRunning;
+    }
+
     @Override
     protected void onProgressUpdate(Integer... values)
     {
@@ -122,7 +126,15 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     @Override
     protected Double doInBackground(Integer... params)
     {
-        run();
+        if(serverIP != "" && serverPort != 0) {
+            isRunning = true;
+            run();
+            isRunning = false;
+        }
+        else
+        {
+            Log.e("Client", "Server IP or port not specified");
+        }
         return 0.0;
     }
 

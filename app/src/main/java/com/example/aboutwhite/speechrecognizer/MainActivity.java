@@ -41,7 +41,9 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     private ImageView start;
     private ImageView stop;
     private TCPClient client;
-    private TCPServer server;
+    private Button restartClient;
+    private EditText ipEditText;
+    //private TCPServer server;
 
 
 
@@ -51,17 +53,14 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("TESTTEST");
         //init TCP Client/Server
-        server = new TCPServer(this);
-        client = new TCPClient(this);
+        //server = new TCPServer(this);
 
-
-        server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 
         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-       audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 
 
         // Initialize Droid Speech
@@ -81,6 +80,44 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
         start.setOnClickListener(this);
         //stop.setOnClickListener(this);
+
+
+        initButtonAndEditText();
+    }
+
+    private void initButtonAndEditText()
+    {
+        ipEditText = findViewById(R.id.ipEditText);
+        restartClient = findViewById(R.id.restartClient);
+
+        restartClient.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                String ip = ipEditText.getText().toString();
+                // check ip string
+                if(ip != "")
+                {
+
+                    //(re)start client
+                    startClient(ip);
+                }
+            }
+        });
+    }
+
+    private void startClient(String ip)
+    {
+        if(client != null) {
+            if (client.isRunning()) {
+                client.stopClient();
+
+                while (client.isRunning()) {
+                }
+            }
+        }
+
+        client = new TCPClient(this, ip, 4444);
         client.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -199,6 +236,10 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     public void messageReceived(String message)
     {
         Log.d("communication", "messageReceived: " + message);
+        if(message == "listen")
+        {
+            //start automatic listening
+        }
     }
 }
 
