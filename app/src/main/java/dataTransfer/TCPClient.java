@@ -59,30 +59,27 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
             String serverMessage = "";
             InetAddress serverAddr = InetAddress.getByName(serverIP);
 
-            Log.e("TCP Client", "C: Connecting...");
             changeTextViewInMainAcitvity("Client: Connecting...");
 
             //create a socket to make the connection with the server
             Socket socket = new Socket(serverAddr, serverPort);
-            Log.d("TCP Client", "socket initiated");
+
             changeTextViewInMainAcitvity("Client: socket initiated");
 
             try {
                 //send the message to the server
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
 
-                Log.d("TCP Client", "printWriter initiated");
                 changeTextViewInMainAcitvity("Client: printWriter initiated");
 
                 mRun = true;
-                Log.d("TCP Client", "client ready to send");
                 changeTextViewInMainAcitvity("Client: ready to send");
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
                     //////////////////////////////////
                     // send message
                     String compareString = new String(new byte[]{108, 105, 115, 116, 101, 110});
-                    serverMessage = "listen";
+
                     if(serverMessage == compareString)
                     {
                         Log.d("Client", "here");
@@ -100,10 +97,6 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                         inputStream.read(byteArray);
 
                         serverMessage = new String (byteArray);
-                        if(serverMessage == "listen")
-                        {
-                            Log.d("Client", "listen is true");
-                        }
                         Log.d("TCP Client", serverMessage);
                         changeTextViewInMainAcitvity("Client: Server message received: " + serverMessage + ".");
                     }
