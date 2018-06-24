@@ -126,9 +126,6 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         if(client != null) {
             if (client.isRunning()) {
                 client.stopClient();
-
-                while (client.isRunning()) {
-                }
             }
         }
 

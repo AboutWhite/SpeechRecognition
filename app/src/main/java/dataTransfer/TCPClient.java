@@ -48,8 +48,6 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     }
 
     public void stopClient(){
-        //sendMessage(closeConnection);
-
         mRun = false;
     }
 
@@ -78,9 +76,9 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                 while (mRun) {
                     //////////////////////////////////
                     // send message
-                    String compareString = new String(new byte[]{108, 105, 115, 116, 101, 110});
+                    String compareString = "listen";
 
-                    if(serverMessage == compareString)
+                    if(serverMessage.equals(compareString))
                     {
                         Log.d("Client", "here");
                         sendMessage("This is a client message to the server");
@@ -105,7 +103,8 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
                     if(!mRun)
                     {
-                        sendMessage(closeConnection);
+                        sendMessage("closeC");
+                        Log.d("Client", "close message sent");
                     }
 
                 }
