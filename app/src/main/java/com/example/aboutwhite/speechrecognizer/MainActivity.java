@@ -41,9 +41,9 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     private ImageView start;
     private ImageView stop;
     private TCPClient client;
-    private Button restartClient;
+    private Button restartClient, closeConnection;
     private EditText ipEditText;
-    //private TCPServer server;
+    private TextView textView;
 
 
 
@@ -52,11 +52,6 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //init TCP Client/Server
-        //server = new TCPServer(this);
-
-        //server.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 
         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
@@ -82,13 +77,15 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         //stop.setOnClickListener(this);
 
 
-        initButtonAndEditText();
+        init();
     }
 
-    private void initButtonAndEditText()
+    private void init()
     {
+        textView = findViewById(R.id.txtVwServerStatus);
         ipEditText = findViewById(R.id.ipEditText);
         restartClient = findViewById(R.id.restartClient);
+        closeConnection = findViewById(R.id.closeConnection);
 
         restartClient.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -104,6 +101,24 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
                 }
             }
         });
+
+        closeConnection.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                closeClientConnection();
+            }
+        });
+    }
+
+    public void changeTextViewText(String txt)
+    {
+        textView.setText(txt);
+    }
+
+    public void closeClientConnection()
+    {
+        client.stopClient();
     }
 
     private void startClient(String ip)
@@ -117,7 +132,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
             }
         }
 
-        client = new TCPClient(this, ip, 4444);
+        client = new TCPClient(this, this, ip, 4444);
         client.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 

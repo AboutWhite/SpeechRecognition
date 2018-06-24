@@ -70,4 +70,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/restartClient"/>
+
+    <Button
+        android:id="@+id/closeConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/closeConnection"/>
+
+    <TextView
+        android:id="@+id/txtVwServerStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -2,4 +2,5 @@
     <string name="app_name">SpeechRecognizer</string>
     <string name="restartClient">(re)start client</string>
     <string name="ipEditText">ip address</string>
+    <string name="closeConnection">Close connection</string>
 </resources>

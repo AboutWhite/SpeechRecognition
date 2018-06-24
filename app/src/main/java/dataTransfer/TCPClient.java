@@ -4,6 +4,7 @@ package dataTransfer;
     Source: https://www.myandroidsolutions.com/2012/07/20/android-tcp-connection-tutorial/#.WuMW_JdCSUl
  */
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Xml;
@@ -15,22 +16,21 @@ import java.util.Arrays;
 
 public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
-
-    private String serverMessage;
     private String serverIP = ""; // = "132.199.202.158"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
     private int serverPort = 0;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false; //is client listening?
     private boolean isRunning = false; //is client running?
+    private Activity uiActivity;
 
     PrintWriter out;
-    BufferedReader in;
 
     /**
      *  Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(OnMessageReceived listener, String sIP, int port) {
+    public TCPClient(OnMessageReceived listener, Activity a, String sIP, int port) {
         mMessageListener = listener;
+        uiActivity = a;
         serverIP = sIP;
         serverPort = port;
     }
@@ -49,60 +49,61 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
     public void stopClient(){
         mRun = false;
+        sendMessage("close");
     }
 
     public void run() {
         try {
-            byte [] byteArray = new byte[1024];
+            byte [] byteArray = new byte[6];
+            String serverMessage = "";
             InetAddress serverAddr = InetAddress.getByName(serverIP);
 
             Log.e("TCP Client", "C: Connecting...");
+            changeTextViewInMainAcitvity("Client: Connecting...");
 
             //create a socket to make the connection with the server
             Socket socket = new Socket(serverAddr, serverPort);
             Log.d("TCP Client", "socket initiated");
+            changeTextViewInMainAcitvity("Client: socket initiated");
 
             try {
-
                 //send the message to the server
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
 
                 Log.d("TCP Client", "printWriter initiated");
-
-                //receive the message which the server sends back
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                changeTextViewInMainAcitvity("Client: printWriter initiated");
 
                 mRun = true;
                 Log.d("TCP Client", "client ready to send");
+                changeTextViewInMainAcitvity("Client: ready to send");
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
-                    sendMessage("This is a client message to the server");
-                    /*serverMessage = in.readLine();
-                    Log.e("TCP Client", serverMessage);
+                    //////////////////////////////////
+                    // send message
 
-                    if (serverMessage != null && mMessageListener != null) {
-                        //call the method messageReceived from MyActivity class
-                        mMessageListener.messageReceived(serverMessage);
+                    if(serverMessage == "listen")
+                    {
+                        sendMessage("This is a client message to the server");
+                        changeTextViewInMainAcitvity("Client: message sent to server");
                     }
-                    serverMessage = null;*/
 
                     //////////////////////////////////
+                    // receive message
 
                     InputStream inputStream = socket.getInputStream();
                     inputStream.read(byteArray);
 
-                    String msg = Arrays.toString(byteArray);
-                    Log.e("TCP Client", msg);
+                    serverMessage = new String (byteArray);
+                    Log.d("TCP Client", serverMessage);
+                    changeTextViewInMainAcitvity("Client: Server message received: " + serverMessage);
 
                     //////////////////////////////////
 
                 }
-
-                Log.e("RESPONSE FROM SERVER", "S: Received Message: '" + serverMessage + "'");
-
             } catch (Exception e) {
 
                 Log.e("TCP", "S: Error", e);
+                changeTextViewInMainAcitvity("Client: error after socket initiation");
                 e.printStackTrace();
 
             } finally {
@@ -114,9 +115,20 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         } catch (Exception e) {
 
             Log.e("TCP", "C: Error", e);
+            changeTextViewInMainAcitvity("Client: error during socket initiation: " + e.getMessage());
 
         }
 
+    }
+
+    private void changeTextViewInMainAcitvity(final String txt)
+    {
+        uiActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMessageListener.changeTextViewText(txt);
+            }
+        });
     }
 
     public boolean isRunning()
@@ -156,5 +168,6 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     //class at on asynckTask doInBackground
     public interface OnMessageReceived {
         public void messageReceived(String message);
+        public void changeTextViewText(String txt);
     }
 }
