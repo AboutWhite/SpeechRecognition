@@ -6,9 +6,12 @@ package dataTransfer;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Xml;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
@@ -50,6 +53,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
     public void run() {
         try {
+            byte [] byteArray = new byte[1024];
             InetAddress serverAddr = InetAddress.getByName(serverIP);
 
             Log.e("TCP Client", "C: Connecting...");
@@ -73,14 +77,24 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
                     sendMessage("This is a client message to the server");
-                    //serverMessage = in.readLine();
+                    /*serverMessage = in.readLine();
                     Log.e("TCP Client", serverMessage);
 
                     if (serverMessage != null && mMessageListener != null) {
                         //call the method messageReceived from MyActivity class
                         mMessageListener.messageReceived(serverMessage);
                     }
-                    serverMessage = null;
+                    serverMessage = null;*/
+
+                    //////////////////////////////////
+
+                    InputStream inputStream = socket.getInputStream();
+                    inputStream.read(byteArray);
+
+                    String msg = Arrays.toString(byteArray);
+                    Log.e("TCP Client", msg);
+
+                    //////////////////////////////////
 
                 }
 
