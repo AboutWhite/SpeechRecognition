@@ -17,6 +17,7 @@ import java.util.Arrays;
 public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
     private String serverIP = ""; // = "132.199.202.158"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
+    private String closeConnection = "closeC";
     private int serverPort = 0;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false; //is client listening?
@@ -43,13 +44,13 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         if (out != null && !out.checkError()) {
             out.println(message);
             out.flush();
-            //Log.d("message", "sendMessage: sent");
         }
     }
 
     public void stopClient(){
+        //sendMessage(closeConnection);
+
         mRun = false;
-        sendMessage("close");
     }
 
     public void run() {
@@ -80,24 +81,39 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                 while (mRun) {
                     //////////////////////////////////
                     // send message
-
-                    if(serverMessage == "listen")
+                    String compareString = new String(new byte[]{108, 105, 115, 116, 101, 110});
+                    serverMessage = "listen";
+                    if(serverMessage == compareString)
                     {
+                        Log.d("Client", "here");
                         sendMessage("This is a client message to the server");
                         changeTextViewInMainAcitvity("Client: message sent to server");
+                        serverMessage = "";
                     }
 
                     //////////////////////////////////
                     // receive message
-
                     InputStream inputStream = socket.getInputStream();
-                    inputStream.read(byteArray);
 
-                    serverMessage = new String (byteArray);
-                    Log.d("TCP Client", serverMessage);
-                    changeTextViewInMainAcitvity("Client: Server message received: " + serverMessage);
+                    if(inputStream.available() > 0)
+                    {
+                        inputStream.read(byteArray);
+
+                        serverMessage = new String (byteArray);
+                        if(serverMessage == "listen")
+                        {
+                            Log.d("Client", "listen is true");
+                        }
+                        Log.d("TCP Client", serverMessage);
+                        changeTextViewInMainAcitvity("Client: Server message received: " + serverMessage + ".");
+                    }
 
                     //////////////////////////////////
+
+                    if(!mRun)
+                    {
+                        sendMessage(closeConnection);
+                    }
 
                 }
             } catch (Exception e) {
@@ -155,6 +171,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         if(serverIP != "" && serverPort != 0) {
             isRunning = true;
             run();
+            changeTextViewInMainAcitvity("Client: closed");
             isRunning = false;
         }
         else

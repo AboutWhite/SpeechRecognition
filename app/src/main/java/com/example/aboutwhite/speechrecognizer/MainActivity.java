@@ -3,7 +3,6 @@ package com.example.aboutwhite.speechrecognizer;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -16,23 +15,19 @@ import com.vikramezhil.droidspeech.OnDSListener;
 import java.util.List;
 import android.app.Activity;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.vikramezhil.droidspeech.DroidSpeech;
 import com.vikramezhil.droidspeech.OnDSListener;
 import com.vikramezhil.droidspeech.OnDSPermissionsListener;
-import java.util.List;
+
 import java.util.Random;
 
 import dataTransfer.TCPClient;
-import dataTransfer.TCPServer;
 
-public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived, TCPServer.OnMessageReceived {
+public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived{
 
     public final String TAG = "Activity_DroidSpeech";
     private DroidSpeech droidSpeech;
@@ -118,7 +113,12 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
     public void closeClientConnection()
     {
-        client.stopClient();
+        if (client != null)
+        {
+            client.stopClient();
+            Log.d("Client", client.isRunning() + "");
+            //client = null;
+        }
     }
 
     private void startClient(String ip)
