@@ -17,11 +17,13 @@ import java.util.Arrays;
 public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
     private String serverIP = ""; // = "132.199.202.158"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
-    private String closeConnection = "closeC";
+    private final String CLOSE_CONNECTION = "closeC";
+    private final String NO_NUMBER_DETECTED = "NaN";
+    private final String SERVER_LISTEN_REQEST = "listen";
     private int serverPort = 0;
     private OnMessageReceived mMessageListener = null;
-    private boolean mRun = false; //is client listening?
-    private boolean isRunning = false; //is client running?
+    private boolean mRun = false;       //is client listening?
+    private boolean isRunning = false;  //is client running?
     private Activity uiActivity;
 
     PrintWriter out;
@@ -76,12 +78,15 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                 while (mRun) {
                     //////////////////////////////////
                     // send message
-                    String compareString = "listen";
 
-                    if(serverMessage.equals(compareString))
+                    if(serverMessage.equals(SERVER_LISTEN_REQEST))
                     {
                         Log.d("Client", "here");
-                        sendMessage("This is a client message to the server");
+                        //sendMessage("This is a client message to the server");
+
+                        // String number = requestNumber
+                        //sendMessage(number);
+
                         changeTextViewInMainAcitvity("Client: message sent to server");
                         serverMessage = "";
                     }
@@ -103,7 +108,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
                     if(!mRun)
                     {
-                        sendMessage("closeC");
+                        sendMessage(CLOSE_CONNECTION);
                         Log.d("Client", "close message sent");
                     }
 
