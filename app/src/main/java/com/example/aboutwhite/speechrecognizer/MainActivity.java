@@ -180,6 +180,9 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         // Setting the final speech result
         this.finalSpeechResult.setText(finalSpeechResult);
 
+
+        analyseResult(finalSpeechResult);
+
         if(droidSpeech.getContinuousSpeechRecognition())
         {
             int[] colorPallets1 = new int[] {Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA};
@@ -194,6 +197,20 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
             start.setVisibility(View.VISIBLE);
         }
     }
+
+
+    private String analyseResult(String s) {
+        return s;
+
+
+
+
+
+
+    }
+
+
+
 
     @Override
     public void onDroidSpeechClosedByUser()
