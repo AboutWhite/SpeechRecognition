@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.vikramezhil.droidspeech.DroidSpeech;
 import com.vikramezhil.droidspeech.OnDSListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
 import android.graphics.Color;
@@ -174,6 +175,10 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         Log.i(TAG, "Live speech result = " + liveSpeechResult);
     }
 
+
+
+
+
     @Override
     public void onDroidSpeechFinalResult(String finalSpeechResult)
     {
@@ -200,11 +205,108 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
 
     private String analyseResult(String s) {
-        return s;
+
+        String NO_NUMBER_DETECTED = "NaN";
+        String[] splitStr = s.split("\\s+");
+
+        ArrayList<String> numbers = new ArrayList<>();
 
 
+        for (String current : splitStr) {
 
 
+            switch (current.toLowerCase()) {
+                case "0":
+                    numbers.add(current);
+                    break;
+                case "1":
+                    numbers.add(current);
+                    break;
+                case "2":
+                    numbers.add(current);
+                    break;
+                case "3":
+                    numbers.add(current);
+                    break;
+                case "4":
+                    numbers.add(current);
+                    break;
+                case "5":
+                    numbers.add(current);
+                    break;
+                case "6":
+                    numbers.add(current);
+                    break;
+                case "7":
+                    numbers.add(current);
+                    break;
+                case "8":
+                    numbers.add(current);
+                    break;
+                case "9":
+                    numbers.add(current);
+                    break;
+                case "10":
+                    numbers.add(current);
+                    break;
+                case "null":
+                    numbers.add(current);
+                    break;
+                case "eins":
+                    numbers.add(current);
+                    break;
+                case "zwei":
+                    numbers.add(current);
+                    break;
+                case "drei":
+                    numbers.add(current);
+                    break;
+                case "vier":
+                    numbers.add(current);
+                    break;
+                case "fünf":
+                    numbers.add(current);
+                    break;
+                case "sechs":
+                    numbers.add(current);
+                    break;
+                case "sieben":
+                    numbers.add(current);
+                    break;
+                case "acht":
+                    numbers.add(current);
+                    break;
+                case "neun":
+                    numbers.add(current);
+                    break;
+                case "zehn":
+                    numbers.add(current);
+                    break;
+                case "heinz":
+                    numbers.add("1");
+                    break;
+                case "sex":
+                    numbers.add("6");
+                    break;
+                case "hans":
+                    numbers.add("1");
+                    break;
+
+
+                default:
+
+
+            }
+
+
+         }
+
+
+        if(numbers.size() >0){
+            return NO_NUMBER_DETECTED;
+        }else{
+            return numbers.get(numbers.size()-1);
+        }
 
 
     }
@@ -237,6 +339,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     }
 
 
+    
     @Override
     public void onClick(View view) {
         switch (view.getId())
