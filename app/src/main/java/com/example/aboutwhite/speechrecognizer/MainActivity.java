@@ -28,7 +28,7 @@ import java.util.Random;
 
 import dataTransfer.TCPClient;
 
-public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived{
+public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived, TCPClient.OnNumberRequested{
 
     public final String TAG = "Activity_DroidSpeech";
     private DroidSpeech droidSpeech;
@@ -40,8 +40,6 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     private Button restartClient, closeConnection;
     private EditText ipEditText;
     private TextView textView;
-
-
 
 
     @Override
@@ -76,6 +74,10 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         init();
     }
 
+    /**
+     * initialises ui elements
+     * sets click listeners for the buttons
+     */
     private void init()
     {
         textView = findViewById(R.id.txtVwServerStatus);
@@ -91,7 +93,6 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
                 // check ip string
                 if(ip != "")
                 {
-
                     //(re)start client
                     startClient(ip);
                 }
@@ -117,8 +118,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         if (client != null)
         {
             client.stopClient();
-            Log.d("Client", client.isRunning() + "");
-            //client = null;
+            client = null;
         }
     }
 
@@ -133,7 +133,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
             }
         }
 
-        client = new TCPClient(this, this, ip, 4444);
+        client = new TCPClient(this, this, this, ip, 4444);
         client.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -176,9 +176,11 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     }
 
 
-
-
-
+    /**
+     * this method is called by the speech recognition after it detected a word/sentence
+     * the method calls the analysis of the detected string and notifies the client thread afterwards
+     * @param finalSpeechResult: detected word(s)
+     */
     @Override
     public void onDroidSpeechFinalResult(String finalSpeechResult)
     {
@@ -186,7 +188,9 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         this.finalSpeechResult.setText(finalSpeechResult);
 
 
-        analyseResult(finalSpeechResult);
+        String number = analyseResult(finalSpeechResult);
+        notifyClient(number);
+
 
         if(droidSpeech.getContinuousSpeechRecognition())
         {
@@ -203,112 +207,95 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         }
     }
 
+    /**
+     * is called by client thread to start a request for a number;
+     * droidSpeech starts speech recognition
+     */
+    @Override
+    public void requestNumber()
+    {
+        droidSpeech.startDroidSpeechRecognition();
+    }
+
+    /**
+     * notifies the client thread that a number was detected by the speech recognition
+     * and hands the number over to the client thread
+     * @param number: detected number
+     */
+    private void notifyClient(String number)
+    {
+        client.numberReceived(number);
+    }
 
     private String analyseResult(String s) {
 
-        String NO_NUMBER_DETECTED = "NaN";
+        final String NO_NUMBER_DETECTED = "NaN";
         String[] splitStr = s.split("\\s+");
 
         ArrayList<String> numbers = new ArrayList<>();
 
 
-        for (String current : splitStr) {
-
-
-            switch (current.toLowerCase()) {
+        for (String current : splitStr)
+        {
+            switch (current.toLowerCase())
+            {
                 case "0":
-                    numbers.add(current);
-                    break;
-                case "1":
-                    numbers.add(current);
-                    break;
-                case "2":
-                    numbers.add(current);
-                    break;
-                case "3":
-                    numbers.add(current);
-                    break;
-                case "4":
-                    numbers.add(current);
-                    break;
-                case "5":
-                    numbers.add(current);
-                    break;
-                case "6":
-                    numbers.add(current);
-                    break;
-                case "7":
-                    numbers.add(current);
-                    break;
-                case "8":
-                    numbers.add(current);
-                    break;
-                case "9":
-                    numbers.add(current);
-                    break;
-                case "10":
-                    numbers.add(current);
-                    break;
                 case "null":
                     numbers.add("0");
                     break;
+                case "1":
                 case "eins":
-                    numbers.add("1");
-                    break;
-                case "zwei":
-                    numbers.add("2");
-                    break;
-                case "drei":
-                    numbers.add("3");
-                    break;
-                case "vier":
-                    numbers.add("4");
-                    break;
-                case "fünf":
-                    numbers.add("5");
-                    break;
-                case "sechs":
-                    numbers.add("6");
-                    break;
-                case "sieben":
-                    numbers.add("7");
-                    break;
-                case "acht":
-                    numbers.add("8");
-                    break;
-                case "neun":
-                    numbers.add("9");
-                    break;
-                case "zehn":
-                    numbers.add("10");
-                    break;
                 case "heinz":
-                    numbers.add("1");
-                    break;
-                case "sex":
-                    numbers.add("6");
-                    break;
                 case "hans":
                     numbers.add("1");
                     break;
-
-
+                case "2":
+                case "zwei":
+                    numbers.add("2");
+                    break;
+                case "3":
+                case "drei":
+                    numbers.add("3");
+                    break;
+                case "4":
+                case "vier":
+                    numbers.add("4");
+                    break;
+                case "5":
+                case "fünf":
+                    numbers.add("5");
+                    break;
+                case "6":
+                case "sechs":
+                case "sex":
+                    numbers.add("6");
+                    break;
+                case "7":
+                case "sieben":
+                    numbers.add("7");
+                    break;
+                case "8":
+                case "acht":
+                    numbers.add("8");
+                    break;
+                case "9":
+                case "neun":
+                    numbers.add("9");
+                    break;
+                case "10":
+                case "zehn":
+                    numbers.add("10");
+                    break;
                 default:
-
-
+                    break;
             }
+        }
 
-
-         }
-
-
-        if(numbers.size() >0){
+        if(numbers.size() > 0){
             return NO_NUMBER_DETECTED;
         }else{
             return numbers.get(numbers.size()-1);
         }
-
-
     }
 
 

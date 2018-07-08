@@ -16,12 +16,13 @@ import java.util.Arrays;
 
 public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
-    private String serverIP = ""; // = "132.199.202.158"; //"192.168.178.34/46"; //217.232.249.44; //"192.168.0.102"; //your computer IP address
+    private String serverIP = "";
     private final String CLOSE_CONNECTION = "closeC";
     private final String NO_NUMBER_DETECTED = "NaN";
     private final String SERVER_LISTEN_REQEST = "listen";
     private int serverPort = 0;
-    private OnMessageReceived mMessageListener = null;
+    private OnMessageReceived mMessageListener;
+    private OnNumberRequested mRequestListener;
     private boolean mRun = false;       //is client listening?
     private boolean isRunning = false;  //is client running?
     private Activity uiActivity;
@@ -31,8 +32,9 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     /**
      *  Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(OnMessageReceived listener, Activity a, String sIP, int port) {
-        mMessageListener = listener;
+    public TCPClient(OnMessageReceived messageListener, OnNumberRequested requestListener, Activity a, String sIP, int port) {
+        mMessageListener = messageListener;
+        mRequestListener = requestListener;
         uiActivity = a;
         serverIP = sIP;
         serverPort = port;
@@ -59,21 +61,21 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
             String serverMessage = "";
             InetAddress serverAddr = InetAddress.getByName(serverIP);
 
-            changeTextViewInMainAcitvity("Client: Connecting...");
+            changeTextViewInMainActivity("Client: Connecting...");
 
             //create a socket to make the connection with the server
             Socket socket = new Socket(serverAddr, serverPort);
 
-            changeTextViewInMainAcitvity("Client: socket initiated");
+            changeTextViewInMainActivity("Client: socket initiated");
 
             try {
                 //send the message to the server
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
 
-                changeTextViewInMainAcitvity("Client: printWriter initiated");
+                changeTextViewInMainActivity("Client: printWriter initiated");
 
                 mRun = true;
-                changeTextViewInMainAcitvity("Client: ready to send");
+                changeTextViewInMainActivity("Client: ready to send");
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
                     //////////////////////////////////
@@ -84,10 +86,9 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                         Log.d("Client", "here");
                         //sendMessage("This is a client message to the server");
 
-                        // String number = requestNumber
-                        //sendMessage(number);
+                        requestNumber();
 
-                        changeTextViewInMainAcitvity("Client: message sent to server");
+                        changeTextViewInMainActivity("Client: message sent to server");
                         serverMessage = "";
                     }
 
@@ -101,7 +102,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
                         serverMessage = new String (byteArray);
                         Log.d("TCP Client", serverMessage);
-                        changeTextViewInMainAcitvity("Client: Server message received: " + serverMessage + ".");
+                        changeTextViewInMainActivity("Client: Server message received: " + serverMessage + ".");
                     }
 
                     //////////////////////////////////
@@ -116,7 +117,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
             } catch (Exception e) {
 
                 Log.e("TCP", "S: Error", e);
-                changeTextViewInMainAcitvity("Client: error after socket initiation");
+                changeTextViewInMainActivity("Client: error after socket initiation");
                 e.printStackTrace();
 
             } finally {
@@ -128,18 +129,37 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         } catch (Exception e) {
 
             Log.e("TCP", "C: Error", e);
-            changeTextViewInMainAcitvity("Client: error during socket initiation: " + e.getMessage());
+            changeTextViewInMainActivity("Client: error during socket initiation: " + e.getMessage());
 
         }
 
     }
 
-    private void changeTextViewInMainAcitvity(final String txt)
+    /**
+        client thread requested a number from the speech recognition
+        which uses this method to return the number to the client thread
+     */
+    public void numberReceived(String number)
+    {
+        sendMessage(number);
+    }
+
+    private void changeTextViewInMainActivity(final String txt)
     {
         uiActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mMessageListener.changeTextViewText(txt);
+            }
+        });
+    }
+
+    private void requestNumber()
+    {
+        uiActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRequestListener.requestNumber();
             }
         });
     }
@@ -168,7 +188,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         if(serverIP != "" && serverPort != 0) {
             isRunning = true;
             run();
-            changeTextViewInMainAcitvity("Client: closed");
+            changeTextViewInMainActivity("Client: closed");
             isRunning = false;
         }
         else
@@ -183,5 +203,10 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     public interface OnMessageReceived {
         public void messageReceived(String message);
         public void changeTextViewText(String txt);
+    }
+
+    public interface OnNumberRequested
+    {
+        public void requestNumber();
     }
 }
