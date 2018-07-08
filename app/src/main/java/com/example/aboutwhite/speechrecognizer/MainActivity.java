@@ -250,37 +250,37 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
                     numbers.add(current);
                     break;
                 case "null":
-                    numbers.add(current);
+                    numbers.add("0");
                     break;
                 case "eins":
-                    numbers.add(current);
+                    numbers.add("1");
                     break;
                 case "zwei":
-                    numbers.add(current);
+                    numbers.add("2");
                     break;
                 case "drei":
-                    numbers.add(current);
+                    numbers.add("3");
                     break;
                 case "vier":
-                    numbers.add(current);
+                    numbers.add("4");
                     break;
                 case "fünf":
-                    numbers.add(current);
+                    numbers.add("5");
                     break;
                 case "sechs":
-                    numbers.add(current);
+                    numbers.add("6");
                     break;
                 case "sieben":
-                    numbers.add(current);
+                    numbers.add("7");
                     break;
                 case "acht":
-                    numbers.add(current);
+                    numbers.add("8");
                     break;
                 case "neun":
-                    numbers.add(current);
+                    numbers.add("9");
                     break;
                 case "zehn":
-                    numbers.add(current);
+                    numbers.add("10");
                     break;
                 case "heinz":
                     numbers.add("1");
@@ -339,7 +339,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     }
 
 
-    
+
     @Override
     public void onClick(View view) {
         switch (view.getId())
