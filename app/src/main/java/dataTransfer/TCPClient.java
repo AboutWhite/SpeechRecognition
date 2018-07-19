@@ -27,6 +27,8 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     private boolean isRunning = false;  //is client running?
     private Activity uiActivity;
 
+    private String stringToSend = "";
+
     PrintWriter out;
 
     /**
@@ -83,13 +85,16 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
                     if(serverMessage.equals(SERVER_LISTEN_REQEST))
                     {
-                        Log.d("Client", "here");
-                        //sendMessage("This is a client message to the server");
-
                         requestNumber();
-
-                        changeTextViewInMainActivity("Client: message sent to server");
                         serverMessage = "";
+                    }
+
+                    if(stringToSend != "")
+                    {
+                        sendMessage(stringToSend);
+                        stringToSend = "";
+                        Log.d("Client", "sent message to server");
+                        changeTextViewInMainActivity("Client: message sent to server");
                     }
 
                     //////////////////////////////////
@@ -141,7 +146,9 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
      */
     public void numberReceived(String number)
     {
-        sendMessage(number);
+        stringToSend = number;
+        Log.d("Number", stringToSend);
+        int a = 0;
     }
 
     private void changeTextViewInMainActivity(final String txt)

@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.support.test:exposed-instrumentation-api-publish-0.5">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/2375a85b209379e0cea8bf213ad79363daa5f5bc/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/2375a85b209379e0cea8bf213ad79363daa5f5bc/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/exposed-instrumentation-api-publish-0.5.aar/b55277ed88affa0f369d860ece30ffee/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/exposed-instrumentation-api-publish-0.5.aar/b55277ed88affa0f369d860ece30ffee/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://E:/Android/Project_SKD/extras/android/m2repository/com/android/support/test/exposed-instrumentation-api-publish/0.5/exposed-instrumentation-api-publish-0.5-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../../Android/sdk/extras/android/m2repository/com/android/support/test/exposed-instrumentation-api-publish/0.5/exposed-instrumentation-api-publish-0.5-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://E:/Android/Project_SKD/extras/android/m2repository/com/android/support/test/exposed-instrumentation-api-publish/0.5/exposed-instrumentation-api-publish-0.5-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../../Android/sdk/extras/android/m2repository/com/android/support/test/exposed-instrumentation-api-publish/0.5/exposed-instrumentation-api-publish-0.5-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

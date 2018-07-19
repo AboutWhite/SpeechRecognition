@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
 
         String number = analyseResult(finalSpeechResult);
-        notifyClient(number);
+        notifyClientThread(number);
 
 
         if(droidSpeech.getContinuousSpeechRecognition())
@@ -222,7 +222,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
      * and hands the number over to the client thread
      * @param number: detected number
      */
-    private void notifyClient(String number)
+    private void notifyClientThread(String number)
     {
         client.numberReceived(number);
     }
@@ -291,7 +291,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
             }
         }
 
-        if(numbers.size() > 0){
+        if(numbers.size() <= 0){
             return NO_NUMBER_DETECTED;
         }else{
             return numbers.get(numbers.size()-1);
