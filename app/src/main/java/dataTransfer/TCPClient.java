@@ -16,18 +16,20 @@ import java.util.Arrays;
 
 public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
-    private String serverIP = "";
     private final String CLOSE_CONNECTION = "closeC";
     private final String SERVER_LISTEN_REQEST = "listen";
+
+    private String serverIP = "";
     private int serverPort = 0;
+
     private OnChangeUIText mUIThreadListener;
     private OnNumberRequested mRequestListener;
 
-    private boolean mRun = false;       //is client listening?
-    private boolean isRunning = false;  //is client running?
-
     private Activity uiActivity;
     private Queue queue;
+
+    private boolean mRun = false;       //is client listening?
+    private boolean isRunning = false;  //is client running?
 
     private String stringToSend = "";
 
@@ -62,7 +64,8 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
     public void run() {
         try {
-            byte [] byteArray = new byte[6];
+            byte [] byteArray;
+            int length;
             String serverMessage = "";
             InetAddress serverAddr = InetAddress.getByName(serverIP);
 
@@ -105,8 +108,9 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                     // receive message
                     InputStream inputStream = socket.getInputStream();
 
-                    if(inputStream.available() > 0)
+                    if((length = inputStream.available()) > 0)
                     {
+                        byteArray = new byte[length];
                         inputStream.read(byteArray);
 
                         serverMessage = new String (byteArray);

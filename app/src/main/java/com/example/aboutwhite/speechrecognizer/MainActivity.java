@@ -71,7 +71,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         stop = findViewById(R.id.stop);
 
         start.setOnClickListener(this);
-        //stop.setOnClickListener(this);
+        //stop.setOnClickListener(this);*/
 
         queue = new Queue();
         queue.start();
