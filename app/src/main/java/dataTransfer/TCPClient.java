@@ -18,14 +18,16 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 {
     private String serverIP = "";
     private final String CLOSE_CONNECTION = "closeC";
-    private final String NO_NUMBER_DETECTED = "NaN";
     private final String SERVER_LISTEN_REQEST = "listen";
     private int serverPort = 0;
-    private OnMessageReceived mMessageListener;
+    private OnChangeUIText mUIThreadListener;
     private OnNumberRequested mRequestListener;
+
     private boolean mRun = false;       //is client listening?
     private boolean isRunning = false;  //is client running?
+
     private Activity uiActivity;
+    private Queue queue;
 
     private String stringToSend = "";
 
@@ -34,9 +36,10 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     /**
      *  Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(OnMessageReceived messageListener, OnNumberRequested requestListener, Activity a, String sIP, int port) {
-        mMessageListener = messageListener;
+    public TCPClient(OnChangeUIText uiListener, OnNumberRequested requestListener, Queue q, Activity a, String sIP, int port) {
+        mUIThreadListener = uiListener;
         mRequestListener = requestListener;
+        queue = q;
         uiActivity = a;
         serverIP = sIP;
         serverPort = port;
@@ -89,7 +92,8 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                         serverMessage = "";
                     }
 
-                    if(stringToSend != "")
+                    stringToSend = queue.getFirstObjectFromList();
+                    if(stringToSend != null)
                     {
                         sendMessage(stringToSend);
                         stringToSend = "";
@@ -156,7 +160,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         uiActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMessageListener.changeTextViewText(txt);
+                mUIThreadListener.changeTextViewText(txt);
             }
         });
     }
@@ -205,10 +209,10 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         return 0.0;
     }
 
-    //Declare the interface. The method messageReceived(String message) will must be implemented in the MyActivity
-    //class at on asynckTask doInBackground
-    public interface OnMessageReceived {
-        public void messageReceived(String message);
+
+
+    //Declare the interface.
+    public interface OnChangeUIText {
         public void changeTextViewText(String txt);
     }
 

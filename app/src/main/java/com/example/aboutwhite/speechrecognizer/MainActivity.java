@@ -26,17 +26,20 @@ import com.vikramezhil.droidspeech.OnDSPermissionsListener;
 
 import java.util.Random;
 
+import dataTransfer.Queue;
 import dataTransfer.TCPClient;
 
-public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnMessageReceived, TCPClient.OnNumberRequested{
+public class MainActivity extends Activity implements OnDSListener, OnClickListener, TCPClient.OnChangeUIText, TCPClient.OnNumberRequested{
 
     public final String TAG = "Activity_DroidSpeech";
     private DroidSpeech droidSpeech;
     private TextView finalSpeechResult;
-    private String result = "Result: ";
     private ImageView start;
     private ImageView stop;
+
     private TCPClient client;
+    private Queue queue;
+
     private Button restartClient, closeConnection;
     private EditText ipEditText;
     private TextView textView;
@@ -69,6 +72,9 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
         start.setOnClickListener(this);
         //stop.setOnClickListener(this);
+
+        queue = new Queue();
+        queue.start();
 
 
         init();
@@ -133,7 +139,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
             }
         }
 
-        client = new TCPClient(this, this, this, ip, 4444);
+        client = new TCPClient(this, this, queue, this, ip, 4444);
         client.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -178,7 +184,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
     /**
      * this method is called by the speech recognition after it detected a word/sentence
-     * the method calls the analysis of the detected string and notifies the client thread afterwards
+     * the method calls the analysis of the detected string and adds it to the queue afterwards
      * @param finalSpeechResult: detected word(s)
      */
     @Override
@@ -189,7 +195,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
 
 
         String number = analyseResult(finalSpeechResult);
-        notifyClientThread(number);
+        addToQueue(number);
 
 
         if(droidSpeech.getContinuousSpeechRecognition())
@@ -218,13 +224,12 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
     }
 
     /**
-     * notifies the client thread that a number was detected by the speech recognition
-     * and hands the number over to the client thread
+     * adds the given number (detected by the speech recognition) to the queue
      * @param number: detected number
      */
-    private void notifyClientThread(String number)
+    private void addToQueue(String number)
     {
-        client.numberReceived(number);
+        queue.addToList(number);
     }
 
     private String analyseResult(String s) {
@@ -353,15 +358,6 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
                 break;
         }
 
-    }
-
-    public void messageReceived(String message)
-    {
-        Log.d("communication", "messageReceived: " + message);
-        if(message == "listen")
-        {
-            //start automatic listening
-        }
     }
 }
 
