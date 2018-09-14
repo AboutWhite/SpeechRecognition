@@ -21,20 +21,11 @@ public class TCPServer : MonoBehaviour
     private TcpClient connectedTcpClient;
     private bool clientConnected = false;
     private bool shouldSend = false; //whenever shouldSend is true, a listen request is sent to the client
-
-    private ArrayList receivedNumbers = new ArrayList();
-
+    
     float timer = 10;
-
-    private const string LSL_SERVER_STREAM_INFO_NAME = "Instructions";
-    private const string LSL_SERVER_STREAM_INFO_TYPE = "TCP_Server";
-    private const string LSL_SERVER_STREAM_INFO_ID= "tcpS1";
-    private const string LSL_SR_STREAM_INFO_NAME = "SpeechRecognition";
-    private const string LSL_SR_STREAM_INFO_TYPE = "Numbers";
-
+    
     private readonly string CLOSE_CONNECTION = "closeC";
     private readonly string LISTEN_REQUEST = "listen";
-    private readonly string SPEECH_RECOGNITION_FAILED = "NaN";
 
     // Use this for initialization
     void Start()
@@ -79,9 +70,7 @@ public class TCPServer : MonoBehaviour
                     {
                         clientConnected = true;
                         Debug.Log("Client connected");
-
-                        string[] receive = new string[1];
-                        string[] send = new string[1];
+                        
                         while (clientConnected)
                         {
 
@@ -94,8 +83,9 @@ public class TCPServer : MonoBehaviour
                             }
 
                             ////////////////////////////////////////
-                            // this commented paragraph was used for receiving data via TCP
-                            /*if (stream.DataAvailable)
+                            // this is used to receive data via TCP which only applies to the
+                            // "close connection" statement since LSL is implemented
+                            if (stream.DataAvailable)
                             {
                                 int length;
                                 // Read incomming stream into byte arrary.
@@ -113,12 +103,8 @@ public class TCPServer : MonoBehaviour
                                         clientConnected = false;
                                         connectedTcpClient.Close();
                                     }
-                                    else
-                                    {
-                                        receivedNumbers.Add(clientMessage);
-                                    }
                                 }
-                            }//*/
+                            }
                         }
                         Debug.Log("Client disconnected");
                     }

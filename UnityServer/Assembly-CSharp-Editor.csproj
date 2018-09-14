@@ -10,7 +10,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{FE82C280-A40B-45B3-0384-DEFA2A17DA33}</ProjectGuid>
+    <ProjectGuid>{9AE8918A-FE37-2110-7C3A-2CD7D18045AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -67,10 +67,10 @@
     <Compile Include="Assets\LSL4Unity\Editor\ScriptOrderManagement.cs" />
     <Compile Include="Assets\LSL4Unity\Editor\TimeSyncEditor.cs" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>E:/Program Files (x86)/Eigene Dokumente/Mega/Unity/AI Seminar/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>E:/Program Files (x86)/Eigene Dokumente/Mega/Studium/Leistungen/KI/SpeechRecognition/UnityServer/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>E:/Program Files (x86)/Eigene Dokumente/Mega/Unity/AI Seminar/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>E:/Program Files (x86)/Eigene Dokumente/Mega/Studium/Leistungen/KI/SpeechRecognition/UnityServer/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>E:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -366,7 +366,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{33CC69F9-5F3F-3393-B118-45B969EEA24E}</Project>
+      <Project>{D64E0462-B61B-2F72-7376-919A42DA6026}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
   </ItemGroup>
