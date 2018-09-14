@@ -50,7 +50,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initDroidSpeech();
+        initDroidSpeech();
 
         queue = new Queue();
         queue.start();
@@ -135,9 +135,6 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         if(client != null) {
             if (client.isRunning()) {
                 client.stopClient();
-
-                while (client.isRunning()) {
-                }
             }
         }
 
@@ -235,6 +232,11 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
         queue.addToList(number);
     }
 
+    /**
+     * analyses a given string for a number that might be said by a person
+     * @param s: detected string by speech recognition
+     * @return analyse result
+     */
     private String analyseResult(String s) {
 
         final String NO_NUMBER_DETECTED = "NaN";
@@ -299,6 +301,7 @@ public class MainActivity extends Activity implements OnDSListener, OnClickListe
             }
         }
 
+        // if more numbers are detected, the last one is returned
         if(numbers.size() <= 0){
             return NO_NUMBER_DETECTED;
         }else{

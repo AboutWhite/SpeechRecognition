@@ -20,9 +20,6 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
     private final String STREAM_INFO_NAME = "Numbers";
     private final String STREAM_INFO_TYPE = "SpeechRecognition";
     private final String STREAM_ID = "sr1"; //sr1 = speechRecognition1
-    private final String LSL_SERVER_STREAM_INFO_NAME = "Instructions";
-    private final String LSL_SERVER_STREAM_INFO_TYPE = "TCP_Server";
-    private final String LSL_SERVER_STREAM_INFO_ID= "tcpS1";
 
     private final String[] CLOSE_CONNECTION = {"closeC"};
     private final String SERVER_LISTEN_REQEST = "listen";
@@ -56,6 +53,8 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
         serverIP = sIP;
         serverPort = port;
 
+        stringToSend[0] = "";
+
         initLSL();
     }
 
@@ -78,14 +77,26 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
      * @param message text entered by client
      */
     public void sendMessage(String[] message){
-        /*if (out != null && !out.checkError()) {
+        if (out != null && !out.checkError()) {
             out.println(message);
             out.flush();
-        }*/
+        }
+    }
 
+    /**
+     * sends the given message to the LSL4Unity inlet via LSL
+     * @param msg message to be sent
+     */
+    public void sendMessageViaOutlet(String[] msg)
+    {
         if(outlet != null)
         {
-            outlet.push_sample(message, Calendar.getInstance().getTimeInMillis());
+            Log.d("outlet", "sent");
+            outlet.push_chunk(msg, Calendar.getInstance().getTimeInMillis());
+        }
+        else
+        {
+            Log.e("outlet", "outlet is not defined");
         }
     }
 
@@ -116,12 +127,10 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                 mRun = true;
                 changeTextViewInMainActivity("Client: ready to send");
 
-                String[] receive = new String[1];
-
                 //in this while the client listens for the messages sent by the server
                 while (mRun) {
                     //////////////////////////////////
-                    // send message
+                    // SEND MESSAGE
 
                     if(serverMessage.equals(SERVER_LISTEN_REQEST))
                     {
@@ -130,21 +139,18 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                     }
 
                     stringToSend[0] = queue.getFirstObjectFromList();
-                    if(stringToSend != null)
+                    if(stringToSend[0] != "")
                     {
-                        sendMessage(stringToSend);
-                        stringToSend[0] = "";
+                        sendMessageViaOutlet(stringToSend);
                         Log.d("Client", "sent message to server");
                         changeTextViewInMainActivity("Client: message sent to server");
+                        stringToSend[0] = "";
                     }
 
                     //////////////////////////////////
-                    // receive message
+                    // RECEIVE MESSAGE
 
-                    inlet.pull_sample(receive);
-                    Log.d("Server msg", receive[0]);
-
-                    /*InputStream inputStream = socket.getInputStream();
+                    InputStream inputStream = socket.getInputStream();
 
                     if((length = inputStream.available()) > 0)
                     {
@@ -154,7 +160,7 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
                         serverMessage = new String (byteArray);
                         Log.d("TCP Client", serverMessage);
                         changeTextViewInMainActivity("Client: Server message received: " + serverMessage + ".");
-                    }*/
+                    }//*/
 
                     //////////////////////////////////
 
@@ -184,17 +190,6 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
         }
 
-    }
-
-    /**
-        client thread requested a number from the speech recognition
-        which uses this method to return the number to the client thread
-     */
-    public void numberReceived(String number)
-    {
-        stringToSend[0] = number;
-        Log.d("Number", stringToSend[0]);
-        int a = 0;
     }
 
     private void changeTextViewInMainActivity(final String txt)
@@ -255,11 +250,11 @@ public class TCPClient extends AsyncTask <Integer, Integer, Double>
 
     //Declare the interface.
     public interface OnChangeUIText {
-        public void changeTextViewText(String txt);
+        void changeTextViewText(String txt);
     }
 
     public interface OnNumberRequested
     {
-        public void requestNumber();
+        void requestNumber();
     }
 }
