@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI Seminar", "Assembly-CSharp.csproj", "{33CC69F9-5F3F-3393-B118-45B969EEA24E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI Seminar", "Assembly-CSharp-Editor.csproj", "{FE82C280-A40B-45B3-0384-DEFA2A17DA33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33CC69F9-5F3F-3393-B118-45B969EEA24E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33CC69F9-5F3F-3393-B118-45B969EEA24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33CC69F9-5F3F-3393-B118-45B969EEA24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33CC69F9-5F3F-3393-B118-45B969EEA24E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE82C280-A40B-45B3-0384-DEFA2A17DA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE82C280-A40B-45B3-0384-DEFA2A17DA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE82C280-A40B-45B3-0384-DEFA2A17DA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE82C280-A40B-45B3-0384-DEFA2A17DA33}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
